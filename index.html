@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+<body> 
+    <div id="container">
+    </div>
+    <button onclick="getJokesdata()">get jokes data</button>
+
+    <script>
+        
+        function getJokesdata(){
+            fetch("https://v2.jokeapi.dev/joke/Any?blacklistFlags=political&type=twopart&amount=10")
+            .then(async function(response){
+                const jsonData = await response.json();
+                let jokeHTML = '';
+                // Check if API response is an array
+                if(Array.isArray(jsonData.jokes)){
+                    jsonData.jokes.forEach(joke => {
+                        jokeHTML += `<p>${joke.setup}</p><p>${joke.delivery}</p>`;
+                    });
+                } else {
+                    // If API response is an object
+                    jokeHTML += `<p>${jsonData.setup}</p><p>${jsonData.delivery}</p>`;
+                }
+                document.getElementById("container").innerHTML = jokeHTML;
+            });
+        }
+    </script>
+</body>
+</html>
